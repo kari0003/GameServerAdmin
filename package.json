@@ -1,0 +1,19 @@
+{
+  "name": "game-server-admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kari0003/GameServerAdmin.git"
+  },
+  "author": "kari0003",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kari0003/GameServerAdmin/issues"
+  },
+  "homepage": "https://github.com/kari0003/GameServerAdmin#readme"
+}
