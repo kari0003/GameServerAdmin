@@ -2,7 +2,7 @@
   "name": "game-server-admin",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/kari0003/GameServerAdmin/issues"
   },
-  "homepage": "https://github.com/kari0003/GameServerAdmin#readme"
+  "homepage": "https://github.com/kari0003/GameServerAdmin#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
 }
