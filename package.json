@@ -1,9 +1,10 @@
 {
   "name": "game-server-admin",
   "version": "1.0.0",
-  "description": "",
+  "description": "Consumer to a game server",
   "main": "src/index.js",
   "scripts": {
+    "start": "babel-node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,18 @@
   },
   "homepage": "https://github.com/kari0003/GameServerAdmin#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "convict": "^1.4.0",
+    "dotenv": "^2.0.0",
+    "express": "^4.13.4",
+    "https": "^1.0.0",
+    "request": "^2.72.0",
+    "source-map-support": "^0.4.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-classes": "^6.9.0",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015-node4": "^2.1.0",
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
   }
 }
