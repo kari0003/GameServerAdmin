@@ -18,19 +18,23 @@
   },
   "homepage": "https://github.com/kari0003/GameServerAdmin#readme",
   "dependencies": {
+    "body-parser": "^1.15.1",
     "convict": "^1.4.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "http": "0.0.0",
     "https": "^1.0.0",
+    "morgan": "^1.7.0",
     "request": "^2.72.0",
     "request-promise": "^3.0.0",
     "source-map-support": "^0.4.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-es2015-classes": "^6.9.0",
     "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-es2015-node4": "^2.1.0",
+    "babel-runtime": "^6.9.2",
     "chai": "^3.5.0",
     "mocha": "^2.5.3"
   }
