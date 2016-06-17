@@ -8,7 +8,6 @@ function mainController($scope, $http) {
     $scope.makeRequest = function() {
         $http.post('/api', $scope.formData)
             .success(function(data) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
                 $scope.resBody = JSON.stringify(data, null, 2);
                 console.log(data);
             })

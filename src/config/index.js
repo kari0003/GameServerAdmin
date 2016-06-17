@@ -19,26 +19,12 @@ const conf = convict({
     env: 'NODE_ENV',
     arg: 'env',
   },
-  ip: {
-    doc: 'The IP address to bind.',
-    format: 'ipaddress',
-    default: '127.0.0.1',
-    env: 'IP_ADDRESS',
+  gameServerUrl: {
+    doc: 'The address of the matchmaker server.',
+    format: String,
+    default: 'http://127.0.0.1:8080',
+    env: 'GAME_SERVER_URL',
     arg: 'ip',
-  },
-  domain: {
-    doc: 'The domain where the application is running from.',
-    format: String,
-    default: 'http://healcloud.local',
-    env: 'CORE_DOMAIN',
-    arg: 'coreDomain',
-  },
-  backendUrl: {
-    doc: 'The url of the backend for temp emails. TODO remove.',
-    format: String,
-    default: 'http://healcloud.local',
-    env: 'CORE_BACKEND_URL',
-    arg: 'backendUrl',
   },
   port: {
     doc: 'The port to bind.',
@@ -51,8 +37,8 @@ const conf = convict({
 
 
 // Load environment dependent configuration
-const env = conf.get('env');
-conf.loadFile(path.normalize(`${__dirname}/${env}.json`));
+//const env = conf.get('env');
+//conf.loadFile(path.normalize(`${__dirname}/${env}.json`));
 
 // Perform validation
 conf.validate({

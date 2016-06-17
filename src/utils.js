@@ -1,24 +1,21 @@
 import rp from 'request-promise';
+import config from './config';
 
-const address = 'http://localhost:8080/'
-
-export function makeRequest(path, clientId, verb, body){
+export function makeRequest(options = {}){
   return new Promise((resolve, reject) => {
-    if(!verb){
-      throw new Error('DUDE? SET VERB PLS');
-    }
-    const options = {
-      uri: `${address}${path}`,
-      method: verb,
+    const reqOptions = {
+      uri: `${config.gameServerUrl}${options.path}`,
+      method: options.verb,
+      qs: options.queries,
       headers: {
-        authentication: clientId,
+        authentication: options.clientId,
       },
-      body: body,
+      body: options.body,
       json: true,
     };
-    rp(options)
+    rp(reqOptions)
     .then((res) => {
-      console.log('this and that');
+      console.log(JSON.stringify(reqOptions, null, 2));
       resolve(res);
     });
   });

@@ -17,6 +17,7 @@
 
         <div class="jumbotron text-center">
             <h1>So you want to make some matches</h1>
+            -<a href="https://docs.google.com/document/d/1wnlu6XXX99QiN26O_IvRFwD2cyiHqerfkuOZSUoXFkg/edit">API DOCS</a>-
         </div>
 
         <div id="request-form" class="row">
@@ -37,9 +38,13 @@
                     </div>
                     <div class="form-group col-sm-16">
                         <label for="pathSelect">Add a body:</label>
-                        <textarea class="form-control" rows="5" style="resize:none"></textarea>
+                        <textarea class="form-control" rows="5" style="resize:none"  ng-model="formData.body"></textarea>
                     </div>
 
+                    <div class="form-group col-sm-4">
+                        <label for="clientId">As client:</label>
+                        <input type="number" class="form-control input-lg text-center" id="clientId" ng-model="formData.clientId">
+                    </div>
                     <button type="submit" class="btn btn-primary btn-lg" ng-click="makeRequest()">SEND</button>
                 </form>
             </div>
@@ -48,7 +53,7 @@
         <div class="col-sm-8 col-sm-offset-2 text-center">
             <h1>Response Body:</h1>
             <p>{{resBody}}</p>
-            
+
         </div>
 
     </div>

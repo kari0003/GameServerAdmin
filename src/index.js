@@ -1,4 +1,5 @@
 import { makeRequest } from './utils.js';
+import config from './config';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
@@ -18,18 +19,20 @@ app.get('/', function(req, res) {
 
 app.post('/api', function(req, res) {
   console.log(req.body);
-  makeRequest('', 0, 'get', {})
+  makeRequest({
+    verb: req.body.verb ? req.body.verb : 'GET',
+    path: req.body.path ? req.body.path : '',
+    body: req.body.body ? req.body.body : '{}',
+    clientId: req.body.clientId,
+  })
   .then((data) => {
-    res.json({
-      useful: 'this is a legit message',
-      data: data,
-    });
+    res.json({data: data});
   })
   .catch((err) => {
     console.log(err);
     throw new Error();
   });
 });
-app.listen(3000, () => {
+app.listen(config.port, () => {
   console.log('Started up!');
 });
