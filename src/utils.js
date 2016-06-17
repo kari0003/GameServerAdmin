@@ -16,7 +16,10 @@ export function makeRequest(options = {}){
     rp(reqOptions)
     .then((res) => {
       console.log(JSON.stringify(reqOptions, null, 2));
-      resolve(res);
+      resolve({body: res, request: reqOptions});
+    })
+    .catch((err) => {
+      reject(err);
     });
   });
 }

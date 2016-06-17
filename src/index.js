@@ -34,7 +34,7 @@ app.post('/api', function(req, res) {
     res.json({data: data});
   })
   .catch((err) => {
-    console.log(err);
+    console.log(`ERROR ${err.message.statusCode} ${err.message.error}`);
     throw new Error();
   });
 });
