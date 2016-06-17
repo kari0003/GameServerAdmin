@@ -17,6 +17,11 @@ app.get('/', function(req, res) {
   res.sendfile('./src/public/index.html');
 });
 
+
+app.get('/alpha', function(req, res) {
+  res.sendfile('./src/public/alpha/index.html');
+});
+
 app.post('/api', function(req, res) {
   console.log(req.body);
   makeRequest({
