@@ -1,7 +1,10 @@
 var gameServerAdmin = angular.module('gameServerAdmin', []);
 
+const client = {};
+
 function mainController($scope, $http) {
     $scope.clientId = 1;
+    $scope.statusData = {};
     $scope.formData = {};
     $scope.requestHistory = [];
     $scope.errorHappened = "hide";
@@ -18,7 +21,7 @@ function mainController($scope, $http) {
                 return;
               }
               $scope.errorHappened="hide";
-              $scope.formData.clientId = $scope.clientId;
+              $scope.formData.clientId = client.id = $scope.clientId;
               $scope.resBody = JSON.stringify(res.data.body, null, 2);
             })
             .error(function(data) {
@@ -27,5 +30,24 @@ function mainController($scope, $http) {
                 $scope.resBody = JSON.stringify(res.data.error, null, 2);
                 $scope.requestHistory.push(res.data.request);
             });
+    };
+
+    $scope.refreshClient = function() {
+      $http.post('/api', {
+        clientId: client.id,
+        verb: 'GET',
+        path: '/',
+      }).success(function(res) {
+        client.config = res.data.body[res.data.body.length-1];
+      });
+      $http.post('/api', {
+        clientId: client.id,
+        verb: 'GET',
+        path: '/queue',
+      }).success(function(res) {
+        client.queues = res.data.body;
+        $scope.statusData = client;
+        console.log(client);
+      });
     };
 }

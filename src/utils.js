@@ -10,7 +10,7 @@ export function makeRequest(options = {}){
       headers: {
         authentication: options.clientId,
       },
-      body: options.body,
+      body: options.body.indexOf('{') > -1 ? JSON.parse(options.body) : options.body,
       json: true,
     };
     rp(reqOptions)

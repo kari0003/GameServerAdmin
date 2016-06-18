@@ -27,24 +27,34 @@
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Dashboard <span class="sr-only">(current)</span></a></li>
           <li><a href="#">Templates</a></li>
-          <li><a href="https://docs.google.com/document/d/1wnlu6XXX99QiN26O_IvRFwD2cyiHqerfkuOZSUoXFkg/edit" target="_blank">API DOCS</a></li>
+          <li><a href="https://docs.google.com/document/d/1wnlu6XXX99QiN26O_IvRFwD2cyiHqerfkuOZSUoXFkg/edit?usp=sharing" target="_blank">API DOCS</a></li>
           <li><a href="#">Statistics</a></li>
       </ul>
     </div>
   </nav>
+
   <div class = "container">
     <div class="row">
       <div class="col-md-7" id="status">
         <div class="panel panel-default">
-          <h3 class="text-center">Status</h3>
+          <h3 class="text-center">Status <button class="btn btn-primary" ng-click="refreshClient()">Refresh</button></h3>
           <hr>
           <h4>Response: </h4>
           <span class="{{errorHappened}}">
             <a class="btn btn-danger disabled btn-sm" type="button">ERROR</a>
           </span>
-
           <pre>{{resBody}}</pre>
           <hr>
+          <table class="table table-hover">
+            <tbody>
+              <tr ng-repeat="element in statusData.queues">
+                <td>{{element.queueId}}</td>
+                <td>{{element.status}}</td>
+                <td>Config<span class="caret"></span></td>
+                <td>Entries<span class="caret"></span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="col-md-5" id="controls">
