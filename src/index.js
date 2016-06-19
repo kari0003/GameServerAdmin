@@ -23,7 +23,6 @@ app.get('/alpha', function(req, res) {
 });
 
 app.post('/api', function(req, res) {
-  console.log(req.body);
   makeRequest({
     verb: req.body.verb ? req.body.verb : 'GET',
     path: req.body.path ? req.body.path : '',

@@ -15,6 +15,19 @@
     .table > tbody > tr > td {
       vertical-align: middle;
     }
+    .entry {
+      margin: 5px;
+      padding:5px;
+      border-radius: 5px;
+    }
+    .entry.notDrafted {
+      border: 1px solid green;
+      background-color: lightgreen;
+    }
+    .entry.drafted {
+      border: 1px solid orange;
+      background-color: lightyellow;
+    }
   </style>
 </head>
 <body ng-controller="mainController">
@@ -39,22 +52,30 @@
         <div class="panel panel-default">
           <h3 class="text-center">Status <button class="btn btn-primary" ng-click="refreshClient()">Refresh</button></h3>
           <hr>
-          <h4>Response: </h4>
+          <h4>Response: <a class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#resBody">Hide</a></h4>
           <span class="{{errorHappened}}">
             <a class="btn btn-danger disabled btn-sm" type="button">ERROR</a>
           </span>
-          <pre>{{resBody}}</pre>
+          <pre id="resBody"class="collapse in">{{resBody}}</pre>
           <hr>
-          <table class="table table-hover">
-            <tbody>
-              <tr ng-repeat="element in statusData.queues">
-                <td>{{element.queueId}}</td>
-                <td>{{element.status}}</td>
-                <td>Config<span class="caret"></span></td>
-                <td>Entries<span class="caret"></span></td>
-              </tr>
-            </tbody>
-          </table>
+          <div ng-repeat="element in statusData.queues">
+            <span>{{element.queueId}}</span>
+            <span>{{element.status}}</span>
+            <span data-toggle="collapse" data-target="#config{{element.queueId}}">Config
+              <span class="caret"></span></span>
+            <span data-toggle="collapse" data-target="#entries{{element.queueId}}">Entries
+              <span class="caret"></span></span>
+            <div id="config{{element.queueId}}" class="collapse">
+              <pre>{{element.config}}</pre>
+            </div>
+            <div id="entries{{element.queueId}}" class="collapse">
+              <div class="entry {{isDrafted(entry.drafted)}}" ng-repeat="entry in element.entries">
+                <span>{{entry.name}}</span>
+                <pre>{{JSON.stringify(entry.scores, null, 2)}}</pre>
+              </div>
+            </div>
+          </div>
+          <hr>
         </div>
       </div>
       <div class="col-md-5" id="controls">

@@ -33,12 +33,17 @@ function mainController($scope, $http) {
     };
 
     $scope.refreshClient = function() {
+      $scope.formData.clientId = client.id = $scope.clientId;
       $http.post('/api', {
         clientId: client.id,
         verb: 'GET',
         path: '/',
       }).success(function(res) {
-        client.config = res.data.body[res.data.body.length-1];
+        for(var i = 0; i < res.data.body.length; i++){
+          if(res.data.body[i].clientId === client.id){
+            client.config = res.data.body[i];
+          }
+        }
       });
       $http.post('/api', {
         clientId: client.id,
@@ -46,8 +51,15 @@ function mainController($scope, $http) {
         path: '/queue',
       }).success(function(res) {
         client.queues = res.data.body;
+        for(let i = 0; i < client.queues.length; i++){
+          client.queues[i].config = JSON.stringify(client.queues[i].config, null, 2);
+        }
         $scope.statusData = client;
         console.log(client);
       });
+    };
+
+    $scope.isDrafted = function(d){
+      return d ? "drafted" : "notDrafted";
     };
 }
