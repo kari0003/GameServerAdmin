@@ -4,8 +4,9 @@
   "description": "Consumer to a game server",
   "main": "src/index.js",
   "scripts": {
+    "lint": "eslint src",
     "start": "babel-node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",
@@ -19,11 +20,13 @@
   "homepage": "https://github.com/kari0003/GameServerAdmin#readme",
   "dependencies": {
     "body-parser": "^1.15.1",
+    "chance": "^1.0.3",
     "convict": "^1.4.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "http": "0.0.0",
     "https": "^1.0.0",
+    "lodash": "^4.13.1",
     "morgan": "^1.7.0",
     "request": "^2.72.0",
     "request-promise": "^3.0.0",
@@ -36,6 +39,10 @@
     "babel-preset-es2015-node4": "^2.1.0",
     "babel-runtime": "^6.9.2",
     "chai": "^3.5.0",
+    "eslint": "^2.7.0",
+    "eslint-config-codingsans": "^2.1.0",
+    "eslint-plugin-mocha": "^3.0.0",
+    "eslint-plugin-smells": "^1.0.1",
     "mocha": "^2.5.3"
   }
 }
