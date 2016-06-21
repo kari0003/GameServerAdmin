@@ -1,13 +1,14 @@
-import { makeRequest } from './utils.js';
+import { makeRequest, initClient,
+  createClientConfig, addPlayer } from './utils.js';
 import config from './config';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import { jwtVerifyMw } from './authentication/jwtHandler';
 
 const app = express();
 
-
-app.use(express.static(__dirname.join('/public')));
+app.use(express.static(`${__dirname}/public`));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
@@ -17,9 +18,42 @@ app.get('/', (req, res) => {
   res.sendfile('./src/public/index.html');
 });
 
+app.get('/admin', (req, res) => {
+  res.sendfile('./src/public/admin.html');
+});
 
 app.get('/alpha', (req, res) => {
   res.sendfile('./src/public/alpha/index.html');
+});
+
+app.use('/api/admin', jwtVerifyMw);
+app.post('/api/admin/addPlayer', (req, res) => {
+  console.log('headers ' + req.headers);
+  console.log('body ' + req.body);
+  console.log(req);
+  addPlayer(req.player, req.queue, req.client)
+  .then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json(err, { status: 499 });
+  });
+});
+
+app.post('/api/createClient', (req, res) => {
+  const conf = createClientConfig();
+  initClient(conf)
+  .then((client) => {
+    console.log('created Client: ' + JSON.stringify(client, null, 2));
+    res.json({
+      token: client,
+      body: {
+        description: 'Created client, and encoded it\'s id in da token',
+      },
+    });
+  }).catch((err) => {
+    console.log(err && err.message || err);
+    res.send(500);
+  });
 });
 
 app.post('/api', (req, res) => {
@@ -33,10 +67,9 @@ app.post('/api', (req, res) => {
     res.json({ data });
   })
   .catch((err) => {
-    console.log(err.error);
-    const msg = `ERROR ${err.error.status} - ${err.error.error} - ${err.error.message}`;
-    console.log(msg);
-    res.json({ data: { error: err.error, request: err.options } });
+    console.error(err && err.message || err);
+    const msg = err && err.message || err;
+    res.json({ data: { error: msg, request: err.options } });
     throw new Error();
   });
 });

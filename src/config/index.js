@@ -1,4 +1,4 @@
-import path from 'path';
+//import path from 'path';
 
 import convict from 'convict';
 
@@ -32,6 +32,29 @@ const conf = convict({
     default: 3000,
     env: 'PORT',
     arg: 'port',
+  },
+  token: {
+    secret: {
+      doc: 'Secret used by token creating.',
+      format: String,
+      env: 'TOKEN_SECRET',
+      arg: 'tokenSecret',
+      default: 'I ALSO LIKE TO LIVE DANGEORUSLY',
+    },
+    expires: {
+      doc: 'Indicates when the token will expire IN SECONDS.',
+      format: Number,
+      env: 'TOKEN_EXPIRES',
+      arg: 'tokenExpires',
+      default: 68000,
+    },
+    algorithm: {
+      doc: 'Algorithm which is used to hash secrets.',
+      format: String,
+      env: 'TOKEN_ALGORITHM',
+      arg: 'tokenAlgorithm',
+      default: 'HS256',
+    },
   },
 });
 

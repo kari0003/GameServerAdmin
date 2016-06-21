@@ -38,8 +38,8 @@
           <a class="navbar-brand" href="#">Game Server Admin</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Dashboard <span class="sr-only">(current)</span></a></li>
-          <li><a href="admin">Templates</a></li>
+          <li><a href="/">Dashboard</a></li>
+          <li class="active"><a href="#">Templates <span class="sr-only">(current)</span></a></li>
           <li><a href="https://docs.google.com/document/d/1wnlu6XXX99QiN26O_IvRFwD2cyiHqerfkuOZSUoXFkg/edit?usp=sharing" target="_blank">API DOCS</a></li>
           <li><a href="#">Statistics</a></li>
       </ul>
@@ -83,52 +83,8 @@
           <h3 class="text-center">Controls</h3>
         </div>
         <div class="row">
-          <hr>
-          <h4>New Request:</h4>
-        </div>
-        <div class="row">
-          <form>
-            <div class="col-xs-3">
-              <select class="form-control" ng-model="formData.verb">
-                <option>GET</option>
-                <option selected>POST</option>
-                <option>PUT</option>
-                <option>DELETE</option>
-              </select>
-            </div>
-            <div class="col-xs-9">
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-addon">{{formData.verb}}</span>
-                  <input type="text" class="form-control" ng-model="formData.path" placeholder="/queues/1000/addPlayer">
-                  <span class="input-group-btn">
-                    <button class="btn btn-secondary" type="button" ng-click="makeRequest()">Send!</button>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-xs-12">
-              <textarea class="form-control" rows="3" ng-model="formData.body" placeholder="{ 'type': 'JSON object' }"></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="row">
-          <hr>
-          <h4>History:</h4>
-          <table class="table table-hover table-bordered">
-            <thead>
-              <th>Verb</th>
-              <th>Path</th>
-              <th>Body</th>
-            </thead>
-            <tbody>
-              <tr ng-repeat="element in requestHistory">
-                <td><a href="#" class="btn btn-primary btn-sm disabled" role="button">{{element.method}}</a></td>
-                <td>{{element.uri}}</td>
-                <td>{{element.body}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <button class="btn btn-primary" ng-click="createClient()">Create Client</button>
+          <button class="btn btn-warn" ng-click="addPlayer()">Add random Player</button>
         </div>
       </div>
     </div>
