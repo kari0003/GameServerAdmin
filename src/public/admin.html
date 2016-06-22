@@ -52,12 +52,6 @@
         <div class="panel panel-default">
           <h3 class="text-center">Status <button class="btn btn-primary" ng-click="refreshClient()">Refresh</button></h3>
           <hr>
-          <h4>Response: <a class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#resBody">Hide</a></h4>
-          <span class="{{errorHappened}}">
-            <a class="btn btn-danger disabled btn-sm" type="button">ERROR</a>
-          </span>
-          <pre id="resBody"class="collapse in">{{resBody}}</pre>
-          <hr>
           <div ng-repeat="element in statusData.queues">
             <span>{{element.queueId}}</span>
             <span>{{element.status}}</span>
@@ -84,8 +78,15 @@
         </div>
         <div class="row">
           <button class="btn btn-primary" ng-click="createClient()">Create Client</button>
-          <button class="btn btn-warn" ng-click="addPlayer()">Add random Player</button>
+          <button class="btn btn-info" ng-click="createQueue()">Create Queue</button>
+          <button class="btn btn-danger" ng-click="addPlayer()">Add random Player</button>
         </div>
+        <h4>Response: <a class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#resBody">Hide</a></h4>
+        <span class="{{errorHappened}}">
+          <a class="btn btn-danger disabled btn-sm" type="button">ERROR</a>
+        </span>
+        <pre id="resBody"class="collapse in">{{resBody}}</pre>
+        <hr>
       </div>
     </div>
   </div>

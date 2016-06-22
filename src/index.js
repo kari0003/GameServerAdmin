@@ -28,9 +28,6 @@ app.get('/alpha', (req, res) => {
 
 app.use('/api/admin', jwtVerifyMw);
 app.post('/api/admin/addPlayer', (req, res) => {
-  console.log('headers ' + req.headers);
-  console.log('body ' + req.body);
-  console.log(req);
   addPlayer(req.player, req.queue, req.client)
   .then((data) => {
     res.json(data);

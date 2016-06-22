@@ -18,20 +18,23 @@ export function jwtSign(data) {
 }
 
 export function jwtVerify(token) {
+  console.log('token:' + token);
   return new Promise((resolve, reject) => jwt.verify(
     token,
     config.token.secret,
     (err, decoded) => {
       if (err) {
-        reject(err);
+        return reject(err);
       }
-      resolve(decoded);
+      return resolve(decoded);
     }
   ));
 }
 
 export function jwtVerifyMw(req, res, next) {
-  jwtVerify(req.token)
+  console.log('addPrayer');
+  console.log('headers ' + JSON.stringify(req.headers));
+  return jwtVerify(req.headers.token)
   .then((decoded) => {
     req.client = decoded;
     return next();

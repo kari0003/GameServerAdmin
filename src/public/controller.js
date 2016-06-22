@@ -65,20 +65,23 @@ function mainController($scope, $http) { // eslint-disable-line
     $http.post('/api/createClient', {})
     .success(function(res) {
       $scope.token = res.token;
-      console.log('Token: ' + res.token);
+      console.log('Token: ' + $scope.token);
       $scope.statusData = res.body;
     });
   };
 
   $scope.addPlayer = function() {
     $scope.formData.clientId = client.id = $scope.clientId;
-    $http.post('/api/createClient', {})
-    .success(function(res) {
-      $scope.statusData = res;
-    }, {
+    const options = {
+      method: 'POST',
+      url: '/api/admin/addPlayer',
       headers: {
         token: $scope.token,
       },
+    };
+    $http(options)
+    .success(function(res) {
+      $scope.statusData = res;
     });
   };
   $scope.isDrafted = function(d) {
