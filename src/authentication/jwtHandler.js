@@ -18,7 +18,6 @@ export function jwtSign(data) {
 }
 
 export function jwtVerify(token) {
-  console.log('token:' + token);
   return new Promise((resolve, reject) => jwt.verify(
     token,
     config.token.secret,
@@ -32,8 +31,6 @@ export function jwtVerify(token) {
 }
 
 export function jwtVerifyMw(req, res, next) {
-  console.log('addPrayer');
-  console.log('headers ' + JSON.stringify(req.headers));
   return jwtVerify(req.headers.token)
   .then((decoded) => {
     req.client = decoded;

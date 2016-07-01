@@ -15,11 +15,13 @@ export function makeRequest(options = {}) {
       headers: {
         authentication: options.clientId,
       },
-      //body: options.body.indexOf('{') > -1 ? JSON.parse(options.body) : options.body,
+      body: options.body, //options.body.indexOf('{') > -1 ? JSON.parse(options.body) : options.body,
       json: true,
     };
+    console.log(reqOptions);
     rp(reqOptions)
     .then((res) => {
+      console.log('Req: ', JSON.stringify(res, null, 2), 'opt: ', JSON.stringify(reqOptions, null, 2));
       resolve({ body: res, request: reqOptions });
     })
     .catch((err) => {
@@ -28,9 +30,17 @@ export function makeRequest(options = {}) {
   });
 }
 
-export function addPlayer(player, queue, client) {
+export function addPlayer(player = {}, queue = {
+  id: 1000,
+  config: {
+    aspectNames: ['elo'],
+    considerAspect: { elo: true },
+    aspectWeight: 1,
+  } },
+  client) {
   const validPlayer = {
     name: player.name ? player.name : chance.name(),
+    score: {},
   };
   if (!player.scores) {
     _.forEach(queue.config.aspectNames, (aspect) => {

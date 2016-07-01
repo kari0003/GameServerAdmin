@@ -70,6 +70,22 @@ function mainController($scope, $http) { // eslint-disable-line
     });
   };
 
+  $scope.createQueue = function() {
+    console.log('shit');
+    const options = {
+      method: 'POST',
+      url: '/api/admin/createQueue',
+      headers: {
+        token: $scope.token,
+      },
+    };
+    $http(options)
+    .success(function(res) {
+      $scope.statusData = res;
+      console.log(res);
+    });
+  };
+
   $scope.addPlayer = function() {
     $scope.formData.clientId = client.id = $scope.clientId;
     const options = {

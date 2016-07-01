@@ -28,12 +28,23 @@ app.get('/alpha', (req, res) => {
 
 app.use('/api/admin', jwtVerifyMw);
 app.post('/api/admin/addPlayer', (req, res) => {
-  addPlayer(req.player, req.queue, req.client)
+  console.log(req.client);
+  addPlayer(req.body.player, req.body.queue, req.client)
   .then((data) => {
     res.json(data);
   }).catch((err) => {
-    res.json(err, { status: 499 });
+    res.json({ err, status: 499 });
   });
+});
+
+app.post('/api/admin/createQueue', (req, res) => {
+  console.log('Create Queue:', req.client);
+  makeRequest({
+    clientId: '' + req.client.id,
+    path: '/queue',
+    verb: 'POST',
+    body: 'test',
+  }).then((data) => res.json(data));
 });
 
 app.post('/api/createClient', (req, res) => {
@@ -70,6 +81,7 @@ app.post('/api', (req, res) => {
     throw new Error();
   });
 });
+
 app.listen(config.port, () => {
-  console.log('Started up!');
+  console.log('Started up!'); // eslint-disable-line
 });
