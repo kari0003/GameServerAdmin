@@ -29,6 +29,7 @@ app.get('/alpha', (req, res) => {
 app.use('/api/admin', jwtVerifyMw);
 app.post('/api/admin/addPlayer', (req, res) => {
   console.log(req.client);
+  console.log(req.body);
   addPlayer(req.body.player, req.body.queue, req.client)
   .then((data) => {
     res.json(data);
@@ -49,6 +50,7 @@ app.post('/api/admin/createQueue', (req, res) => {
 
 app.post('/api/createClient', (req, res) => {
   const conf = createClientConfig();
+  console.log(conf);
   initClient(conf)
   .then((client) => {
     console.log('created Client: ' + JSON.stringify(client, null, 2));

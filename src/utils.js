@@ -15,13 +15,13 @@ export function makeRequest(options = {}) {
       headers: {
         authentication: options.clientId,
       },
-      body: options.body, //options.body.indexOf('{') > -1 ? JSON.parse(options.body) : options.body,
+      body: options.body,
       json: true,
     };
     console.log(reqOptions);
     rp(reqOptions)
     .then((res) => {
-      console.log('Req: ', JSON.stringify(res, null, 2), 'opt: ', JSON.stringify(reqOptions, null, 2));
+      console.log('Response: ', JSON.stringify(res, null, 2));
       resolve({ body: res, request: reqOptions });
     })
     .catch((err) => {
@@ -40,19 +40,22 @@ export function addPlayer(player = {}, queue = {
   client) {
   const validPlayer = {
     name: player.name ? player.name : chance.name(),
-    score: {},
+    scores: {},
   };
   if (!player.scores) {
     _.forEach(queue.config.aspectNames, (aspect) => {
       if (queue.config.considerAspect[aspect]) {
-        validPlayer.score[aspect] = chance.integer({ min: 0, max: 3000 });
+        validPlayer.scores[aspect] = chance.integer({ min: 0, max: 3000 });
       }
     });
   }
   return makeRequest({
     verb: 'POST',
     path: `/queue/${queue.id}/players`,
-    body: validPlayer,
+    body: {
+      queueId: queue.id,
+      player: validPlayer,
+    },
     clientId: client.id,
   });
 }
@@ -88,9 +91,10 @@ export function initClient(configuration) {
   return makeRequest({
     verb: 'POST',
     path: '',
-    //body: JSON.stringify(configuration),
+    body: configuration,
     json: true,
   }).then((res) => {
-    return { id: res.body };
+//    console.log('client response', res);
+    return { id: res.body.data };
   }).then(jwtSign);
 }

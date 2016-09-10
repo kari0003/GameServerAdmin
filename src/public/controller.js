@@ -8,7 +8,7 @@ function mainController($scope, $http) { // eslint-disable-line
   $scope.formData = {};
   $scope.requestHistory = [];
   $scope.errorHappened = 'hide';
-  $scope.token = 'BULLZEYE';
+  $scope.token = 'TOKEN NOT GIVEN YET';
 
   $scope.formData.verb = 'POST';
 
@@ -40,9 +40,9 @@ function mainController($scope, $http) { // eslint-disable-line
       verb: 'GET',
       path: '/',
     }).success(function(res) {
-      for (let i = 0; i < res.data.body.length; i++) {
-        if (res.data.body[i].clientId === client.id) {
-          client.config = res.data.body[i];
+      for (let i = 0; i < res.data.body.data.length; i++) {
+        if (res.data.body.data[i].clientId === client.id) {
+          client.config = res.data.body.data[i];
         }
       }
     });
@@ -51,7 +51,7 @@ function mainController($scope, $http) { // eslint-disable-line
       verb: 'GET',
       path: '/queue',
     }).success(function(res) {
-      client.queues = res.data.body;
+      client.queues = res.data.body.data;
       for (let i = 0; i < client.queues.length; i++) {
         client.queues[i].config = JSON.stringify(client.queues[i].config, null, 2);
       }
@@ -93,6 +93,11 @@ function mainController($scope, $http) { // eslint-disable-line
       url: '/api/admin/addPlayer',
       headers: {
         token: $scope.token,
+      },
+      body: {
+        queue: {
+          queueId: $scope.formData.queueId ? $scope.formData.queueId : 1000,
+        },
       },
     };
     $http(options)
