@@ -77,10 +77,14 @@
           <h3 class="text-center">Controls</h3>
         </div>
         <div class="row">
-          <button class="btn btn-primary" ng-click="createClient()">Create Client</button>
-          <button class="btn btn-info" ng-click="createQueue()">Create Queue</button>
-          <button class="btn btn-danger" ng-click="addPlayer()">Add random Player</button>
-          <input type="text" class="form-control input-lg text-center" id="queueIdInput" ng-model="formData.queueId">
+          <button class="btn btn-primary col-md-4" ng-click="createClient()">Create Client</button>
+          <span>{{clientId}}</span>
+          <button class="btn btn-info col-md-4" ng-click="createQueue()">Create Queue</button>
+        </div>
+        <div class="row">
+          <button class="btn btn-danger col-md-4" ng-click="addPlayer()">Add random Player</button>
+          <span calss="col-md-4">Add player to:</span>
+          <input type="text" class="col-md-4 text-center" placeholder="Queue Id" id="queueIdInput" ng-model="formData.queueId">
         </div>
         <h4>Response: <a class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#resBody">Hide</a></h4>
         <span class="{{errorHappened}}">

@@ -34,34 +34,40 @@ function mainController($scope, $http) { // eslint-disable-line
   };
 
   $scope.refreshClient = function() {
-    $scope.formData.clientId = client.id = $scope.clientId;
-    $http.post('/api', {
-      clientId: client.id,
-      verb: 'GET',
-      path: '/',
-    }).success(function(res) {
-      for (let i = 0; i < res.data.body.data.length; i++) {
-        if (res.data.body.data[i].clientId === client.id) {
-          client.config = res.data.body.data[i];
+    $http.get('/api/admin/whoami',{
+      headers: {
+        token: $scope.token,
+      },
+    }).success((whoami) => {
+      $scope.formData.clientId = client.id = $scope.clientId = whoami.id;
+      $http.post('/api', {
+        clientId: client.id,
+        verb: 'GET',
+        path: '/',
+      }).success(function(res) {
+        for (let i = 0; i < res.data.body.data.length; i++) {
+          if (res.data.body.data[i].clientId === client.id) {
+            client.config = res.data.body.data[i];
+          }
         }
-      }
-    });
-    $http.post('/api', {
-      clientId: client.id,
-      verb: 'GET',
-      path: '/queue',
-    }).success(function(res) {
-      client.queues = res.data.body.data;
-      for (let i = 0; i < client.queues.length; i++) {
-        client.queues[i].config = JSON.stringify(client.queues[i].config, null, 2);
-      }
-      $scope.statusData = client;
-      console.log(client);
+      });
+      $http.post('/api', {
+        clientId: client.id,
+        verb: 'GET',
+        path: '/queue',
+      }).success(function(res) {
+        client.queues = res.data.body.data;
+        for (let i = 0; i < client.queues.length; i++) {
+          client.queues[i].config = JSON.stringify(client.queues[i].config, null, 2);
+        }
+        $scope.statusData = client;
+      });
     });
   };
 
   $scope.createClient = function() {
     $scope.formData.clientId = client.id = $scope.clientId;
+    console.log(client.id);
     $http.post('/api/createClient', {})
     .success(function(res) {
       $scope.token = res.token;
@@ -71,7 +77,6 @@ function mainController($scope, $http) { // eslint-disable-line
   };
 
   $scope.createQueue = function() {
-    console.log('shit');
     const options = {
       method: 'POST',
       url: '/api/admin/createQueue',
@@ -88,21 +93,30 @@ function mainController($scope, $http) { // eslint-disable-line
 
   $scope.addPlayer = function() {
     $scope.formData.clientId = client.id = $scope.clientId;
+    console.log($scope.formData);
+    if(!$scope.formData.queueId) {
+      return alert('Please enter queue Id');
+    }
     const options = {
       method: 'POST',
       url: '/api/admin/addPlayer',
       headers: {
         token: $scope.token,
       },
-      body: {
+      data: {
         queue: {
-          queueId: $scope.formData.queueId ? $scope.formData.queueId : 1000,
+          id: $scope.formData.queueId,
+          config: {
+            aspectNames: ['elo'],
+            considerAspect: { elo: true },
+            aspectWeight: { elo: 1 },
+          },
         },
       },
     };
     $http(options)
     .success(function(res) {
-      $scope.statusData = res;
+      //$scope.statusData = res;
     });
   };
   $scope.isDrafted = function(d) {

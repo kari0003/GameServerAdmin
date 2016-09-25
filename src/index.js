@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { makeRequest, initClient,
   createClientConfig, addPlayer } from './utils.js';
 import config from './config';
@@ -27,9 +28,12 @@ app.get('/alpha', (req, res) => {
 });
 
 app.use('/api/admin', jwtVerifyMw);
+
+app.get('/api/admin/whoami', (req, res) => {
+  res.json(_.pick(req.client, 'id'));
+});
 app.post('/api/admin/addPlayer', (req, res) => {
   console.log(req.client);
-  console.log(req.body);
   addPlayer(req.body.player, req.body.queue, req.client)
   .then((data) => {
     res.json(data);
@@ -85,5 +89,5 @@ app.post('/api', (req, res) => {
 });
 
 app.listen(config.port, () => {
-  console.log('Started up!'); // eslint-disable-line
+  console.log(`Started up! (${config.port})`); // eslint-disable-line
 });

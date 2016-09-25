@@ -21,7 +21,7 @@ export function makeRequest(options = {}) {
     console.log(reqOptions);
     rp(reqOptions)
     .then((res) => {
-      console.log('Response: ', JSON.stringify(res, null, 2));
+      console.log('Response OK: ', !_.isNil(res.data));
       resolve({ body: res, request: reqOptions });
     })
     .catch((err) => {
