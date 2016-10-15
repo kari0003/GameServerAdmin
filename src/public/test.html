@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+  <title>Game server Admin</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="/node_modules/angular/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <script src="/node_modules/chart.js/Chart.min.js"></script>
+  <script src="/node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
+  <script src="test.js"></script>
+</head>
+<body ng-controller="GraphTestController">
+  <div class = "container">
+        <div class="row">
+          <button class="btn btn-danger col-md-4" ng-click="generate()">Generate</button>
+          <span calss="col-md-4">Count:</span>
+          <input type="text"
+            class="col-md-4 text-center"
+            placeholder="10000" id="queueIdInput"
+            ng-model="count">
+      </div>
+      <div class="row">
+        <canvas id="line" class="chart chart-line" chart-data="results"
+          chart-labels="_.keys(results)" chart-series="['Distribution']" chart-click="onClick"
+        </canvas>
+        {{count}}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
