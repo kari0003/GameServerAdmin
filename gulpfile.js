@@ -5,11 +5,13 @@ const chug = require('gulp-chug');
 const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
 
+const resources = [
+  'node_modules/angular/angular.js',
+  'node_modules/chart.js/dist/Chart.min.js',
+  'node_modules/angular-chart.js/dist/angular-chart.min.js',
+];
+
 gulp.task('ehehe', function() {
-  gulp.src('node_modules/angular/angular.js')
-    .pipe(gulp.dest('src/public/node_modules/angular'));
-  gulp.src('node_modules/chart.js/Chart.min.js')
-    .pipe(gulp.dest('src/public/node_modules/chart.js'));
-  gulp.src('node_modules/angular-chart.js/dist/angular-chart.min.js')
-    .pipe(gulp.dest('src/public/node_modules/angular-chart.js/dist'));
+  gulp.src(resources)
+    .pipe(gulp.dest('src/public/resources'));
 });

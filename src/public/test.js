@@ -1,14 +1,15 @@
 
 const myApp = angular.module('myApp', ['chart.js'])
   .constant('_', window._)
-  .run(function ($rootScope) {
-    $rootScope._ = window._;
-    console.log('Ehh');
-  })
-  .controller('GraphTestController', function ($scope, $http) { //eslint-disable-line
+  .constant('sampleSize', 4)
+  .controller('GraphTestController', function ($scope, $http, _, sampleSize, ChartJsProvider) { //eslint-disable-line
+    ChartJsProvider.setOptions({
+      colors: ['#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+    });
     $scope.generate = function generate() {
       console.log('WAT');
       $scope.results = gen($scope.count);
+      $scope.labels = _.times(2 * sampleSize * 10 + 1, i => i);
     };
     $scope.onClick = function(points, evt) {
       console.log(points, evt);
