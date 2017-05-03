@@ -13,7 +13,7 @@ export function makeRequest(options = {}) {
       method: options.verb,
       qs: options.queries,
       headers: {
-        authentication: options.clientId,
+        authentication: options.clientId || 'The Dude',
       },
       body: options.body,
       json: true,
@@ -30,33 +30,42 @@ export function makeRequest(options = {}) {
   });
 }
 
-export function addPlayer(player = {}, queue = {
-  id: 1000,
-  config: {
-    aspectNames: ['elo'],
-    considerAspect: { elo: true },
-    aspectWeight: 1,
-  } },
+export function findMatches(queue) {
+  const queueId = queue.id;
+  return makeRequest({
+    verb: 'GET',
+    path: `/queue/${queueId}/matches`,
+  });
+}
+
+export function addPlayer(player = {}, queue = {},
   client) {
   const validPlayer = {
     name: player.name ? player.name : chance.name(),
-    scores: {},
+    traits: {},
   };
-  if (!player.scores) {
-    _.forEach(queue.config.aspectNames, (aspect) => {
-      if (queue.config.considerAspect[aspect]) {
-        validPlayer.scores[aspect] = chance.integer({ min: 0, max: 3000 });
-      }
-    });
+  if (!queue.config) {
+    queue.config = {
+      matcherConfig: {
+        distanceTraits: [{
+          trait: {
+            key: 'elo',
+            type: 'number',
+          },
+          weight: 1.0,
+        }],
+      },
+    };
   }
+  _.forEach(queue.config.matcherConfig.distanceTraits, ({ trait }) => {
+    validPlayer.traits[trait.key] = chance.integer({ min: 1000, max: 2500 });
+  });
   return makeRequest({
-    verb: 'POST',
+    verb: 'PUT',
     path: `/queue/${queue.id}/players`,
     body: {
-      queueId: queue.id,
-      player: validPlayer,
+      players: [validPlayer],
     },
-    clientId: client.id,
   });
 }
 
@@ -88,13 +97,14 @@ export function createClientConfig(clientConfig = { queueConfigs: {
 }
 
 export function initClient(configuration) {
-  return makeRequest({
-    verb: 'POST',
-    path: '',
-    body: configuration,
-    json: true,
-  }).then((res) => {
+//  return makeRequest({
+//    verb: 'POST',
+//    path: '',
+//    body: configuration,
+//    json: true,
+//  }).then((res) => {
 //    console.log('client response', res);
-    return { id: res.body.data };
-  }).then(jwtSign);
+//    return { id: res.body.data };
+//  }).then(jwtSign);
+  return jwtSign({ client: 'admin' });
 }

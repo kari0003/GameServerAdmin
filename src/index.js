@@ -1,6 +1,10 @@
 import _ from 'lodash';
-import { makeRequest, initClient,
-  createClientConfig, addPlayer } from './utils.js';
+import {
+  makeRequest,
+  initClient,
+  createClientConfig,
+  addPlayer,
+  findMatches } from './utils.js';
 import config from './config';
 import express from 'express';
 import morgan from 'morgan';
@@ -30,11 +34,20 @@ app.get('/alpha', (req, res) => {
 app.use('/api/admin', jwtVerifyMw);
 
 app.get('/api/admin/whoami', (req, res) => {
-  res.json(_.pick(req.client, 'id'));
+  return res.json(res.token);
 });
+
 app.post('/api/admin/addPlayer', (req, res) => {
-  console.log(req.client);
-  addPlayer(req.body.player, req.body.queue, req.client)
+  addPlayer({}, { id: req.body.queue.id })
+  .then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json({ err, status: 499 });
+  });
+});
+
+app.post('/api/admin/findMatches', (req, res) => {
+  findMatches({ id: req.body.queue.id })
   .then((data) => {
     res.json(data);
   }).catch((err) => {
@@ -44,12 +57,45 @@ app.post('/api/admin/addPlayer', (req, res) => {
 
 app.post('/api/admin/createQueue', (req, res) => {
   console.log('Create Queue:', req.client);
+  const config = req.body.config || {
+    queueSize: -1,
+    isUpdateEnabled: true,
+    updateInterval: 1000,
+    isGroupEnabled: false,
+    isPlayerEnabled: true,
+    matchOnInsert: false,
+    matchOnQuery: true,
+    matcherConfig: {
+      matchConfig: {
+        teamCount: 2,
+        teamSize: 5,
+      },
+
+      isDistanceMatcher: true,
+      distanceTraits: [{
+        trait: {
+          key: 'elo',
+          type: 'number',
+        },
+        weight: 1.0,
+      }],
+      maxDistancePlayers: 50,
+      maxDistanceTeams: 50,
+
+      isCompabilityMatcher:false,
+      isWaitDurationMatcher: false,
+
+      maxPotentials: -1,
+      maxTargets: -1,
+    }
+  };
   makeRequest({
     clientId: '' + req.client.id,
     path: '/queue',
     verb: 'POST',
-    body: 'test',
-  }).then((data) => res.json(data));
+    body: { config },
+  }).then((data) => res.json(data.body))
+  .catch((err) => res.json(500, err));
 });
 
 app.post('/api/createClient', (req, res) => {
@@ -74,8 +120,7 @@ app.post('/api', (req, res) => {
   makeRequest({
     verb: req.body.verb ? req.body.verb : 'GET',
     path: req.body.path ? req.body.path : '',
-    body: req.body.body ? req.body.body : '{}',
-    clientId: req.body.clientId,
+    body: req.body.body ? req.body.body : {},
   })
   .then((data) => {
     res.json({ data });

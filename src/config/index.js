@@ -22,14 +22,14 @@ const conf = convict({
   gameServerUrl: {
     doc: 'The address of the matchmaker server.',
     format: String,
-    default: 'http://127.0.0.1:8080',
+    default: 'http://127.0.0.1:3000/api/v1',
     env: 'GAME_SERVER_URL',
     arg: 'ip',
   },
   port: {
     doc: 'The port to bind.',
     format: 'port',
-    default: 3000,
+    default: 3001,
     env: 'PORT',
     arg: 'port',
   },

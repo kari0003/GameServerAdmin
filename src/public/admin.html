@@ -50,8 +50,27 @@
     <div class="row">
       <div class="col-md-7" id="status">
         <div class="panel panel-default">
-          <h3 class="text-center">Status <button class="btn btn-primary" ng-click="refreshClient()">Refresh</button></h3>
+          <h3 class="text-center">Queue -{{formData.queueId}}- Status <button class="btn btn-primary" ng-click="refreshClient()">Refresh</button></h3>
           <hr>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Elo</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="entry in statusData.entries">
+                <td>{{entry.player.id}}</td>
+                <td>{{entry.player.name}}</td>
+                <td>{{entry.player.traits.elo}}</td>
+                <td>{{entry.status}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!--
           <div ng-repeat="element in statusData.queues">
             <span>{{element.queueId}}</span>
             <span>{{element.status}}</span>
@@ -69,6 +88,7 @@
               </div>
             </div>
           </div>
+          -->
           <hr>
         </div>
       </div>
@@ -76,16 +96,11 @@
         <div class="row">
           <h3 class="text-center">Controls</h3>
         </div>
-        <div class="row">
-          <button class="btn btn-primary col-md-4" ng-click="createClient()">Create Client</button>
-          <span>{{clientId}}</span>
-          <button class="btn btn-info col-md-4" ng-click="createQueue()">Create Queue</button>
-        </div>
-        <div class="row">
-          <button class="btn btn-danger col-md-4" ng-click="addPlayer()">Add random Player</button>
-          <span calss="col-md-4">Add player to:</span>
-          <input type="text" class="col-md-4 text-center" placeholder="Queue Id" id="queueIdInput" ng-model="formData.queueId">
-        </div>
+        <button class="btn btn-primary col-md-6" ng-click="createClient()">Get the token</button>
+        <button class="btn btn-info col-md-6" ng-click="createQueue()">Create Queue</button>
+        <input type="text" class="form-control text-center" placeholder="Queue Id" id="queueIdInput" ng-model="formData.queueId">
+        <button class="btn btn-danger col-md-12" ng-click="addPlayer()">Add random Player</button>
+        <button class="btn btn-warning col-md-12" ng-click="findMatches()">Find Matches</button>
         <h4>Response: <a class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#resBody">Hide</a></h4>
         <span class="{{errorHappened}}">
           <a class="btn btn-danger disabled btn-sm" type="button">ERROR</a>
