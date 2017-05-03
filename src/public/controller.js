@@ -78,6 +78,48 @@ function mainController($scope, $http) { // eslint-disable-line
     });
   };
 
+  $scope.addPlayers = function() {
+    if(!$scope.formData.queueId) {
+      return alert('Please enter queue Id');
+    }
+    const options = {
+      method: 'POST',
+      url: '/api/admin/addPlayers',
+      headers: {
+        token: $scope.token,
+      },
+      data: $scope.formData,
+    };
+    $http(options)
+    .success(function(res) {
+      $scope.refreshClient();
+    });
+  };
+
+  $scope.startMatch = function() {
+    if(!$scope.formData.queueId) {
+      return alert('Please enter queue Id');
+    }
+    if(!$scope.formData.startMatchId) {
+      return alert('Please select matchId to start');
+    }
+    const options = {
+      method: 'POST',
+      url: '/api/admin/startMatch',
+      headers: {
+        token: $scope.token,
+      },
+      data: {
+        queueId: $scope.formData.queueId,
+        startMatchId: $scope.formData.startMatchId,
+      },
+    };
+    $http(options)
+    .success(function(res) {
+      $scope.refreshClient();
+    });
+  };
+
   $scope.addPlayer = function() {
     if(!$scope.formData.queueId) {
       return alert('Please enter queue Id');
@@ -108,9 +150,7 @@ function mainController($scope, $http) { // eslint-disable-line
         token: $scope.token,
       },
       data: {
-        queue: {
-          id: $scope.formData.queueId,
-        },
+        queueId: $scope.formData.queueId,
       },
     };
     $http(options)

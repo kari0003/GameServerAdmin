@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 function normalFunction() {
   const u1 = Math.random();
@@ -7,6 +7,12 @@ function normalFunction() {
   const O = 2 * Math.PI * u2;
   const z0 = R * Math.cos(O);
   return z0;
+}
+
+function normalGenerator(mean, variance) {
+  return function () {
+    return parseFloat(mean) + parseFloat(variance) * normalFunction();
+  };
 }
 
 export class DistributionVariable {
@@ -29,5 +35,5 @@ export class DistributionVariable {
 }
 
 export function normalDistributionVariable({ mean = 1, variance = 1 } = {}) {
-  return new DistributionVariable(normalFunction, mean, variance);
+  return new DistributionVariable(normalGenerator(mean, variance) , mean, variance);
 }

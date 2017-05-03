@@ -52,6 +52,23 @@
         <div class="panel panel-default">
           <h3 class="text-center">Queue -{{formData.queueId}}- Status <button class="btn btn-primary" ng-click="refreshClient()">Refresh</button></h3>
           <hr>
+          <h4>Matches</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>PlayerIds</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="match in statusData.pendingMatches">
+                <td>{{match.id}}</td>
+                <td>{{match.entryIds}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+          <h4>Players</h4>
           <table class="table table-striped">
             <thead>
               <tr>
@@ -107,6 +124,36 @@
         </span>
         <pre id="resBody"class="collapse in">{{resBody}}</pre>
         <hr>
+        <h4>Add multiple players to the queue</h4>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">#{{formData.queueId}}</span>
+            <input type="text" class="form-control" ng-model="formData.playerCount" placeholder="100 players">
+            <input type="text" class="form-control" ng-model="formData.meanElo" placeholder="mean Elo 1000">
+            <input type="text" class="form-control" ng-model="formData.variance" placeholder="variance 0.5">
+            <span class="input-group-btn">
+              <button class="btn btn-secondary" type="button" ng-click="addPlayers()">Create!</button>
+            </span>
+          </div>
+        </div>
+        <h4>Start Match: </h4>
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 100%;">
+                #{{formData.startMatchId}}
+              </button>
+              <div class="dropdown-menu">
+                <div ng-repeat="match in statusData.pendingMatches">
+                <a class="dropdown-item" ng-click="formData.startMatchId = match.id" href="#">{{match.id}}</a>
+                </div>
+              </div>
+            </div>
+            <span class="input-group-btn">
+              <button class="btn btn-secondary" type="button" ng-click="startMatch()">Start!</button>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

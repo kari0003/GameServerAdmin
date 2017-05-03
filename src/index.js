@@ -4,7 +4,9 @@ import {
   initClient,
   createClientConfig,
   addPlayer,
-  findMatches } from './utils.js';
+  addPlayers,
+  findMatches,
+  startMatches } from './utils.js';
 import config from './config';
 import express from 'express';
 import morgan from 'morgan';
@@ -46,8 +48,26 @@ app.post('/api/admin/addPlayer', (req, res) => {
   });
 });
 
+app.post('/api/admin/addPlayers', (req, res) => {
+  addPlayers(req.body.queueId, req.body.playerCount, req.body.meanElo, req.body.variance)
+  .then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json({ err, status: 499 });
+  });
+});
+
 app.post('/api/admin/findMatches', (req, res) => {
-  findMatches({ id: req.body.queue.id })
+  findMatches(req.body.queueId)
+  .then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json({ err, status: 499 });
+  });
+});
+
+app.post('/api/admin/startMatch', (req, res) => {
+  startMatches(req.body.queueId, [req.body.startMatchId])
   .then((data) => {
     res.json(data);
   }).catch((err) => {

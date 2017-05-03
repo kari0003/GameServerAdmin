@@ -3,6 +3,7 @@ import rp from 'request-promise';
 import Chance from 'chance';
 import config from './config';
 import { jwtSign } from './authentication/jwtHandler.js';
+import { getNormalPlayers } from './simulator/playerGenerator';
 
 const chance = new Chance();
 
@@ -30,14 +31,33 @@ export function makeRequest(options = {}) {
   });
 }
 
-export function findMatches(queue) {
-  const queueId = queue.id;
+export function findMatches(queueId) {
   return makeRequest({
     verb: 'GET',
     path: `/queue/${queueId}/matches`,
   });
 }
 
+export function startMatches(queueId, matchIds) {
+  return makeRequest({
+    verb: 'PUT',
+    path: `/queue/${queueId}/matches/start`,
+    body: {
+      matches: matchIds,
+    },
+  });
+}
+
+export function addPlayers(queueId, playerCount, meanElo, variance) {
+  const players = getNormalPlayers(playerCount, meanElo, variance);
+  return makeRequest({
+    verb: 'PUT',
+    path: `/queue/${queueId}/players`,
+    body: {
+      players,
+    },
+  });
+}
 export function addPlayer(player = {}, queue = {},
   client) {
   const validPlayer = {
