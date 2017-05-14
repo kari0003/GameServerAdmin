@@ -1,36 +1,25 @@
 <!doctype html>
-<html ng-app="gameServerAdmin">
+<html>
 <head>
   <title>Game server Admin</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="resources/Chart.min.js"></script>
+  <script src="resources/angular-chart.min.js"></script>
+  <script src="test.js"></script>
+  
   <script src="controller.js"></script>
 
-  <style>
-    .table > tbody > tr > td {
-      vertical-align: middle;
-    }
-    .entry {
-      margin: 5px;
-      padding:5px;
-      border-radius: 5px;
-    }
-    .entry.notDrafted {
-      border: 1px solid green;
-      background-color: lightgreen;
-    }
-    .entry.drafted {
-      border: 1px solid orange;
-      background-color: lightyellow;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
-<body ng-controller="mainController">
+<body ng-app="gameServerAdmin" ng-controller="mainController">
   <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -68,45 +57,41 @@
             </tbody>
           </table>
           <hr>
-          <h4>Players</h4>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Elo</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="entry in statusData.entries">
-                <td>{{entry.player.id}}</td>
-                <td>{{entry.player.name}}</td>
-                <td>{{entry.player.traits.elo}}</td>
-                <td>{{entry.status}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <!--
-          <div ng-repeat="element in statusData.queues">
-            <span>{{element.queueId}}</span>
-            <span>{{element.status}}</span>
-            <span data-toggle="collapse" data-target="#config{{element.queueId}}">Config
-              <span class="caret"></span></span>
-            <span data-toggle="collapse" data-target="#entries{{element.queueId}}">Entries
-              <span class="caret"></span></span>
-            <div id="config{{element.queueId}}" class="collapse">
-              <pre>{{element.config}}</pre>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title"><a data-toggle="collapse" href="#playerTable">Players <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a></h4>
             </div>
-            <div id="entries{{element.queueId}}" class="collapse">
-              <div class="entry {{isDrafted(entry.drafted)}}" ng-repeat="entry in element.entries">
-                <span>{{entry.player.name}}</span>
-                <pre>{{entry}}</pre>
-              </div>
+            <div id="playerTable" class="panel-collapse collapse">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Elo</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="entry in statusData.entries">
+                    <td>{{entry.player.id}}</td>
+                    <td>{{entry.player.name}}</td>
+                    <td>{{entry.player.traits.elo}}</td>
+                    <td>{{entry.status}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-          -->
           <hr>
+          <h4>Player ELO distribution</h4>
+          <canvas class="chart chart-line" chart-data="statistics.data"
+            chart-labels="statistics.labels" chart-series="statistics.series">
+          </canvas>
+          <hr>
+          <h4>Match fairness</h4>
+          <canvas class="chart chart-line" chart-data="matchStatistics.data"
+            chart-labels="matchStatistics.labels" chart-series="matchStatistics.series">
+          </canvas>
         </div>
       </div>
       <div class="col-md-5" id="controls">
@@ -118,11 +103,13 @@
         <input type="text" class="form-control text-center" placeholder="Queue Id" id="queueIdInput" ng-model="formData.queueId">
         <button class="btn btn-danger col-md-12" ng-click="addPlayer()">Add random Player</button>
         <button class="btn btn-warning col-md-12" ng-click="findMatches()">Find Matches</button>
-        <h4>Response: <a class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#resBody">Hide</a></h4>
-        <span class="{{errorHappened}}">
-          <a class="btn btn-danger disabled btn-sm" type="button">ERROR</a>
-        </span>
-        <pre id="resBody"class="collapse in">{{resBody}}</pre>
+        <div ng-hide="true">
+          <h4>Response: <a class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#resBody">Hide</a></h4>
+          <span class="{{errorHappened}}">
+            <a class="btn btn-danger disabled btn-sm" type="button">ERROR</a>
+          </span>
+          <pre id="resBody"class="collapse in">{{resBody}}</pre>
+        </div>
         <hr>
         <h4>Add multiple players to the queue</h4>
         <div class="form-group">

@@ -1,14 +1,46 @@
-const gameServerAdmin = angular.module('gameServerAdmin', []); //eslint-disable-line
-
 const client = {};
 
-function mainController($scope, $http) { // eslint-disable-line
+angular.module('gameServerAdmin', ['chart.js']) //eslint-disable-line
+.constant('_', window._)
+.controller('mainController', function ($scope, $http, _) { // eslint-disable-line
   $scope.clientId = 1;
   $scope.statusData = {};
   $scope.formData = {};
   $scope.requestHistory = [];
   $scope.errorHappened = 'hide';
   $scope.token = 'TOKEN NOT GIVEN YET';
+  $scope.statistics = {
+    labels: ['1', '2', '3', '4', '5', '6', '7'],
+    series: ['Elo Matcher'],
+    data: [[12, 13, 43, 53, 21, 11, 1]],
+    options: {
+      scales: {
+        yAxes: [{
+          id: 'y-axis-1',
+          type: 'linear',
+          display: true,
+          position: 'left',
+        }],
+      },
+    },
+    colors : [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+  };
+  $scope.matchStatistics = {
+    labels: ['tbd'],
+    series: ['Elo Matcher'],
+    data: [[0]],
+    options: {
+      scales: {
+        yAxes: [{
+          id: 'y-axis-1',
+          type: 'linear',
+          display: true,
+          position: 'left',
+        }],
+      },
+    },
+    colors : [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+  };
 
   $scope.formData.verb = 'POST';
 
@@ -50,6 +82,7 @@ function mainController($scope, $http) { // eslint-disable-line
 //          client.queues[i].config = JSON.stringify(client.queues[i].config, null, 2);
 //        }
 //        $scope.statusData = client;
+          $scope.refreshChart();
       });
     });
   };
@@ -73,7 +106,7 @@ function mainController($scope, $http) { // eslint-disable-line
     $http(options)
     .success(function(res) {
       $scope.statusData = res;
-      $scope.formData.queueId = res.data.item.key;
+      $scope.formData.queueId = res.data.item.id;
       console.log(res);
     });
   };
@@ -158,4 +191,44 @@ function mainController($scope, $http) { // eslint-disable-line
       $scope.refreshClient();
     });
   };
-}
+
+  // Init chart.js provider:
+//  ChartJsProvider.setOptions({
+//    colors: ['#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+//  });
+
+  $scope.refreshChart = function () {
+    const precision = 15;
+    const rawData = _.map($scope.statusData.entries, (entry) => entry.player.traits.elo);
+    const step = (_.max(rawData) - _.min(rawData)) / precision;
+    $scope.statistics.labels = _.times(precision, (i) => parseInt(_.min(rawData) + step * i));
+    $scope.statistics.data[0] = _.times(precision, (i) => {
+      const count = _.countBy(rawData, (data) => {
+        return (data >= _.min(rawData) + step * i) && ( data < _.min(rawData) + step * (i + 1));
+      });
+      return count['true'];
+    });
+    $scope.refreshMatchesChart();
+  }
+
+  $scope.refreshMatchesChart = function () {
+    const precision = 10;
+    const rawData = _.map($scope.statusData.pendingMatches, (match) => {
+      const teamvalues = _.map(match.teams, (team) => {
+        let sum = 0;
+        _.forEach(team.entries, (member) => sum += member.player.traits.elo);
+        return sum;
+      });
+      console.log(teamvalues);
+      return Math.abs(teamvalues[0] - teamvalues[1]);
+    });
+    const step = (_.max(rawData) - _.min(rawData)) / precision;
+    $scope.matchStatistics.labels = _.times(precision, (i) => parseInt(_.min(rawData) + step * i));
+    $scope.matchStatistics.data[0] = _.times(precision, (i) => {
+      const count = _.countBy(rawData, (data) => {
+        return (data >= _.min(rawData) + step * i) && ( data < _.min(rawData) + step * (i + 1));
+      });
+      return count['true'];
+    });
+  }
+});

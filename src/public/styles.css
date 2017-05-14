@@ -1,0 +1,26 @@
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+.entry {
+    margin: 5px;
+    padding:5px;
+    border-radius: 5px;
+}
+.entry.notDrafted {
+    border: 1px solid green;
+    background-color: lightgreen;
+}
+.entry.drafted {
+    border: 1px solid orange;
+    background-color: lightyellow;
+}
+.btn {
+    margin: 4px;
+}
+.panel {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+.chart {
+    padding: 8px;
+}
