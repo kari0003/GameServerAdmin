@@ -41,21 +41,27 @@
         <div class="panel panel-default">
           <h3 class="text-center">Queue -{{formData.queueId}}- Status <button class="btn btn-primary" ng-click="refreshClient()">Refresh</button></h3>
           <hr>
-          <h4>Matches</h4>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>PlayerIds</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="match in statusData.pendingMatches">
-                <td>{{match.id}}</td>
-                <td>{{match.entryIds}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title"><a data-toggle="collapse" href="#matchesTable">Matches <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a></h4>
+            </div>
+            <div id="matchesTable" class="panel-collapse collapse">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>PlayerIds</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="match in statusData.pendingMatches">
+                    <td>{{match.id}}</td>
+                    <td>{{match.entryIds}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
           <hr>
           <div class="panel panel-default">
             <div class="panel-heading">
